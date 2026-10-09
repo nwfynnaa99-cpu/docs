@@ -15,9 +15,13 @@ const fabrics = {
   "daily-grey":     { base: "#9a9893", thread: "#86847f", light: "#e4e1db", fold: 0.0042, pitch: 3, seed: 17 },
   "winter-brown":   { base: "#5b4636", thread: "#4a3829", light: "#b39375", fold: 0.0036, pitch: 5, seed: 29 },
   "black-silk":     { base: "#141414", thread: "#0a0a0a", light: "#6d6658", fold: 0.005,  pitch: 2, seed: 41 },
+  // Accessories
+  "shemagh-red":    { base: "#f3eee6", thread: "#e3dccf", light: "#fffaf2", fold: 0.004,  pitch: 2, seed: 53, check: "#7d0c12" },
+  "ghutra-white":   { base: "#f7f5f0", thread: "#ebe7df", light: "#ffffff", fold: 0.005,  pitch: 2, seed: 61 },
+  "sedairi-camel":  { base: "#a57d52", thread: "#8f6a43", light: "#e2c49c", fold: 0.0035, pitch: 4, seed: 67 },
 };
 
-function svg({ base, thread, light, fold, pitch, seed, sheen = 0.35 }, w, h, { macro = false } = {}) {
+function svg({ base, thread, light, fold, pitch, seed, sheen = 0.35, check }, w, h, { macro = false } = {}) {
   // Overscan so displaced edges never show inside the frame.
   const o = 200;
   const W = w + o * 2;
@@ -45,6 +49,11 @@ function svg({ base, thread, light, fold, pitch, seed, sheen = 0.35 }, w, h, { m
       <stop offset="0" stop-color="${thread}"/><stop offset="0.5" stop-color="${base}"/><stop offset="1" stop-color="${thread}"/>
     </linearGradient>
     ${weave}
+    ${check ? `<pattern id="check" width="${macro ? 220 : 64}" height="${macro ? 220 : 64}" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <rect width="100%" height="100%" fill="${base}"/>
+        <rect x="0" y="0" width="100%" height="${macro ? 70 : 20}" fill="${check}" opacity="0.92"/>
+        <rect x="0" y="0" width="${macro ? 70 : 20}" height="100%" fill="${check}" opacity="0.92"/>
+      </pattern>` : ""}
     <filter id="cloth" x="-100" y="-100" width="${W + 200}" height="${H + 200}" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
       <feTurbulence type="fractalNoise" baseFrequency="${macro ? fold * 2 : fold * 1.15} ${macro ? fold * 2 : fold * 0.35}" numOctaves="3" seed="${seed}" result="folds"/>
       <feDisplacementMap in="SourceGraphic" in2="folds" scale="${macro ? 10 : 30}" xChannelSelector="R" yChannelSelector="G" result="warped"/>
@@ -67,7 +76,9 @@ function svg({ base, thread, light, fold, pitch, seed, sheen = 0.35 }, w, h, { m
       <stop offset="100%" stop-color="#000" stop-opacity="0.3"/>
     </radialGradient>
   </defs>
-  <rect x="0" y="0" width="${W}" height="${H}" fill="url(#weave)" filter="url(#cloth)"/>
+  ${check
+    ? `<g filter="url(#cloth)"><rect x="0" y="0" width="${W}" height="${H}" fill="url(#check)"/><rect x="0" y="0" width="${W}" height="${H}" fill="url(#weave)" opacity="0.18"/></g>`
+    : `<rect x="0" y="0" width="${W}" height="${H}" fill="url(#weave)" filter="url(#cloth)"/>`}
   <rect x="${o}" y="${o}" width="${w}" height="${h}" fill="url(#vig)"/>
 </svg>`;
 }
@@ -81,12 +92,16 @@ const render = (f, w, h, file, quality, opts) =>
     .toFile(`${OUT}${file}.webp`);
 
 const jobs = [];
+const only = process.argv.slice(2);
 for (const [name, f] of Object.entries(fabrics)) {
+  if (only.length && !only.includes(name)) continue;
   jobs.push(render(f, 1200, 1500, `${name}`, 80));
   jobs.push(render(f, 1200, 1200, `${name}-macro`, 82, { macro: true }));
 }
+if (!only.length) {
 // Wide hero drape
 jobs.push(render({ base: "#24221f", thread: "#161513", light: "#d8cbb0", fold: 0.0021, pitch: 2, seed: 43, sheen: 0.75 }, 2400, 1500, `hero-drape`, 78));
 jobs.push(render({ ...fabrics["luxury-navy"], base: "#16130f", thread: "#0d0b08", light: "#b89a5a", fold: 0.0026 }, 1600, 1600, `box-backdrop`, 78));
+}
 await Promise.all(jobs);
 console.log("textures written to", OUT);

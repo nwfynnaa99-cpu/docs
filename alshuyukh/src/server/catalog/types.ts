@@ -36,6 +36,8 @@ export type Product = {
   rating: { average: number; count: number };
   images: Media[];
   fabric?: FabricSpec;
+  /** Filterable attributes for products without a fabric spec (accessories, boxes). */
+  attributes?: { color?: string; season?: string; origin?: string };
   tags: string[];
   inventory: number;
   isBestSeller?: boolean;

@@ -251,7 +251,8 @@
   }
 
   .page-enter {
-    animation: page-in 600ms var(--ease-silk) both;
+    /* backwards (not both): once finished, no lingering stacking context */
+    animation: page-in 600ms var(--ease-silk) backwards;
   }
 
   .scrollbar-none {

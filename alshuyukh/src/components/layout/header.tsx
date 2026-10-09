@@ -64,7 +64,7 @@ export function Header() {
         <nav aria-label="التنقل الرئيسي" className="max-lg:hidden">
           <ul className="flex items-center gap-1 xl:gap-3">
             {mainNav.map((item) => {
-              const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+              const active = item.href === "/" ? pathname === "/" : [item, ...(item.children ?? [])].some((n) => pathname === n.href || pathname.startsWith(`${n.href}/`));
               return (
                 <li key={item.href} className="group/nav relative">
                   <Link href={item.href} aria-current={active ? "page" : undefined} className={cn("relative inline-flex h-11 items-center px-3 text-[0.9375rem] transition-colors", active ? "text-ivory" : "text-ivory/65 hover:text-ivory")}>

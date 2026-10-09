@@ -23,8 +23,8 @@ npm run build && npm start
 |---|---|
 | 1. Design System | ✅ جاهزة ومختبرة |
 | 2. Homepage | ✅ جاهزة ومختبرة |
-| 3. Category pages | ⏳ التالية — روابط `/categories/*` تعرض صفحة 404 مؤقتة |
-| 4. Product page | ⏳ — روابط `/products/*` تعرض صفحة 404 مؤقتة |
+| 3. Category pages | ✅ جاهزة ومختبرة (`/categories/[slug]`, `/offers`) |
+| 4. Product page | ⏳ التالية — روابط `/products/*` تعرض صفحة 404 مؤقتة |
 | 5. Cart & Checkout | 🟡 السلة الجانبية جاهزة؛ صفحة الدفع لم تُبنَ بعد |
 | 6. CMS / Admin | ⏳ |
 
@@ -41,6 +41,8 @@ src/
     product/           ProductCard, FabricZoom, أزرار السلة والمفضلة
     home/              أقسام الصفحة الرئيسية
     cart/ search/ seo/
+  components/category/ CategoryHeader, CategoryChips, CategoryBrowser (تصفية وترتيب)
+  lib/catalog/         منطق التصفية والترتيب (دوال نقية + اختبارات)
   server/catalog/      طبقة البيانات: types + واجهة CatalogRepository + تنفيذ seed
   lib/
     analytics/         أحداث مكتوبة الأنواع → dataLayer (GTM/GA4) + Meta + TikTok
@@ -56,6 +58,22 @@ src/
 
 الأسعار مخزّنة بالهللة (أعداد صحيحة). أسعار السلة للعرض فقط، والخادم يعيد
 حساب كل سعر عند إتمام الطلب.
+
+## صفحات الأقسام
+
+- كل قسم صفحة ثابتة (SSG + ISR كل 5 دقائق). الأقسام الجديدة من الـ CMS تُبنى عند أول طلب.
+- التصفية (الموسم، اللون، المنشأ، السعر، المتوفر) والترتيب تعمل فورًا في المتصفح:
+  البطاقات تُرسم على الخادم، والعميل يغيّر الظهور والترتيب فقط (CSS `order`)،
+  فلا يُعاد رسم أي بطاقة أو صورة.
+- الحالة تُكتب في الرابط (`?season=شتوي&sort=price-asc`) للمشاركة والرجوع.
+- Schema: `BreadcrumbList` و `CollectionPage` + `ItemList`.
+
+## الاختبارات
+
+```sh
+npm test         # منطق التصفية والترتيب وصيغ العدد العربية
+npm run typecheck
+```
 
 ## نظام التصميم
 

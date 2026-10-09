@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { cn } from "@/lib/cn";
 import { Icon } from "./icon";
 
@@ -20,6 +21,10 @@ export function Drawer({ open, onClose, side = "end", title, children, footer, c
   full?: boolean;
 }) {
   const panel = useRef<HTMLDivElement>(null);
+  // Portal to <body> so no ancestor stacking context (transforms, filters,
+  // animations) can trap the overlay beneath the sticky header.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const returnFocus = useRef<HTMLElement | null>(null);
   // Keep the latest onClose without re-running the open/close effect on every render.
   const onCloseRef = useRef(onClose);
@@ -61,7 +66,8 @@ export function Drawer({ open, onClose, side = "end", title, children, footer, c
       : cn("inset-y-0 h-[100dvh] w-full", full ? "" : "sm:w-[28rem]", side === "start" ? "start-0" : "end-0");
   const hidden = side === "top" ? "-translate-y-6 opacity-0" : side === "start" ? "rtl:translate-x-full ltr:-translate-x-full" : "rtl:-translate-x-full ltr:translate-x-full";
 
-  return (
+  if (!mounted) return null;
+  return createPortal(
     <div className={cn("fixed inset-0 z-[60]", !open && "pointer-events-none")} aria-hidden={!open} inert={!open}>
       <div className={cn("absolute inset-0 bg-ink-deep/70 backdrop-blur-[2px] transition-opacity duration-500", open ? "opacity-100" : "opacity-0")} onClick={onClose} />
       <div
@@ -85,6 +91,7 @@ export function Drawer({ open, onClose, side = "end", title, children, footer, c
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">{children}</div>
         {footer && <div className="shrink-0 border-t border-ink-line px-5 py-5 md:px-8">{footer}</div>}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
