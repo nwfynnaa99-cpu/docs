@@ -40,6 +40,21 @@ export function Header() {
 
   const overHero = pathname === "/" && !scrolled;
 
+  // Checkout: distraction-free header (no nav, no cart) to protect conversion.
+  if (pathname.startsWith("/checkout")) {
+    return (
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-ink-line/80 bg-ink/90 backdrop-blur-xl">
+        <div className="container-site grid h-16 grid-cols-[1fr_auto_1fr] items-center md:h-20">
+          <Link href="/" className="inline-flex h-11 items-center gap-2 justify-self-start text-sm text-ivory/70 hover:text-ivory">
+            <Icon name="arrow" size={16} className="rotate-180" /> متابعة التسوق
+          </Link>
+          <Logo compact />
+          <p className="flex items-center gap-2 justify-self-end text-xs text-ivory/70"><Icon name="lock" size={16} className="text-gold" /> دفع آمن</p>
+        </div>
+      </header>
+    );
+  }
+
   return (
     <header
       className={cn(
