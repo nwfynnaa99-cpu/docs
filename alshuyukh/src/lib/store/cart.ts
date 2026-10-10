@@ -22,7 +22,7 @@ const MAX_QTY = 20;
 const toItem = (l: CartLine, quantity = l.quantity) => ({ item_id: l.productId, item_name: l.name, price: l.unitPrice / 100, quantity });
 
 export const cart = {
-  add(line: Omit<CartLine, "quantity">, quantity = 1) {
+  add(line: Omit<CartLine, "quantity">, quantity = 1, { openDrawer = true } = {}) {
     cartStore.set((s) => {
       const existing = s.lines.find((l) => l.productId === line.productId);
       const lines = existing
@@ -31,7 +31,7 @@ export const cart = {
       return { lines };
     });
     track("add_to_cart", { currency: "SAR", value: (line.unitPrice * quantity) / 100, items: [toItem({ ...line, quantity }, quantity)] });
-    ui.set((u) => ({ ...u, cartOpen: true }));
+    if (openDrawer) ui.set((u) => ({ ...u, cartOpen: true }));
   },
   setQuantity(productId: string, quantity: number) {
     if (quantity <= 0) return cart.remove(productId);

@@ -58,7 +58,8 @@ export const seedRepository: CatalogRepository = {
     return offers;
   },
   async listReviews(filter = {}) {
-    const list = filter.productId ? reviews.filter((r) => r.productId === filter.productId) : reviews;
+    let list = filter.productId ? reviews.filter((r) => r.productId === filter.productId) : reviews;
+    if (filter.featured) list = list.filter((r) => r.featured);
     return filter.limit ? list.slice(0, filter.limit) : list;
   },
   async getHomepage() {

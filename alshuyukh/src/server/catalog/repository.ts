@@ -13,6 +13,6 @@ export interface CatalogRepository {
   searchProducts(query: string, limit?: number): Promise<Product[]>;
   listCollections(): Promise<Collection[]>;
   listOffers(): Promise<Offer[]>;
-  listReviews(filter?: { productId?: string; limit?: number }): Promise<Review[]>;
+  listReviews(filter?: { productId?: string; featured?: boolean; limit?: number }): Promise<Review[]>;
   getHomepage(): Promise<HomepageContent>;
 }

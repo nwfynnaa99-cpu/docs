@@ -75,6 +75,8 @@ export type Review = {
   body: string;
   createdAt: string;
   verified: boolean;
+  /** Shown in the homepage testimonials. */
+  featured?: boolean;
 };
 
 export type HomepageContent = {

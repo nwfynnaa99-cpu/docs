@@ -56,7 +56,8 @@ export function FabricZoom({ src, alt, width, height, zoom = 2.4, sizes, classNa
         style={{ transformOrigin: origin, transform: active ? `scale(${zoom})` : "scale(1)" }}
       />
       <span className={cn("pointer-events-none absolute bottom-4 start-4 bg-ink/70 px-3 py-1.5 text-2xs tracking-wide text-ivory/80 backdrop-blur-sm transition-opacity", active && "opacity-0")}>
-        مرّر للتكبير
+        <span className="hidden [@media(hover:hover)]:inline">مرّر للتكبير</span>
+        <span className="[@media(hover:hover)]:hidden">اضغط للتكبير</span>
       </span>
     </div>
   );

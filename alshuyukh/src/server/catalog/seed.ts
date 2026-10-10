@@ -332,10 +332,14 @@ export const offers: Offer[] = [
 ];
 
 export const reviews: Review[] = [
-  { id: "r1", author: "عبدالله الحربي", city: "الرياض", rating: 5, body: "القماش الياباني أفضل مما توقعت. اللمعة هادئة والخياط أثنى على جودته.", createdAt: "2026-08-12", verified: true },
-  { id: "r2", author: "فيصل القحطاني", city: "جدة", rating: 5, body: "التغليف وحده يكفي ليعطيك انطباع الفخامة. والتوصيل كان في يومين.", createdAt: "2026-08-30", verified: true },
-  { id: "r3", author: "سلطان العتيبي", city: "الدمام", rating: 5, body: "طلبت بوكس هدية لوالدي، وكانت التفاصيل مرتبة بعناية. تجربة تستحق.", createdAt: "2026-09-14", verified: true },
-  { id: "r4", author: "ماجد الشهري", city: "أبها", rating: 4, body: "الصوف الفحمي دافئ وثقيل بالشكل الصحيح. سأعود للموسم القادم.", createdAt: "2026-09-21", verified: true },
+  { id: "r1", featured: true, productId: "p-kyoto-white", author: "عبدالله الحربي", city: "الرياض", rating: 5, body: "القماش الياباني أفضل مما توقعت. اللمعة هادئة والخياط أثنى على جودته.", createdAt: "2026-08-12", verified: true },
+  { id: "r2", featured: true, author: "فيصل القحطاني", city: "جدة", rating: 5, body: "التغليف وحده يكفي ليعطيك انطباع الفخامة. والتوصيل كان في يومين.", createdAt: "2026-08-30", verified: true },
+  { id: "r3", featured: true, author: "سلطان العتيبي", city: "الدمام", rating: 5, body: "طلبت بوكس هدية لوالدي، وكانت التفاصيل مرتبة بعناية. تجربة تستحق.", createdAt: "2026-09-14", verified: true },
+  { id: "r5", productId: "p-kyoto-white", author: "نواف الدوسري", city: "الرياض", rating: 5, body: "فصّلت منه ثوب العيد. البياض ثابت بعد الغسيل، والقماش لا يتجعد بسهولة.", createdAt: "2026-09-02", verified: true },
+  { id: "r6", productId: "p-kyoto-white", author: "خالد المطيري", city: "الكويت", rating: 4, body: "جودة عالية. تمنيت لو كان العرض أكبر قليلًا لأن طولي 190.", createdAt: "2026-09-28", verified: true },
+  { id: "r7", productId: "p-ivory-zephyr", author: "تركي الغامدي", city: "جدة", rating: 5, body: "خفيف جدًا ومناسب لرطوبة جدة. لونه العاجي أجمل من الصور.", createdAt: "2026-07-19", verified: true },
+  { id: "r8", productId: "p-shemagh-red-classic", author: "بندر الشمري", city: "حائل", rating: 5, body: "النقشة ثابتة والقماش يمسك الكوية. أفضل شماغ اشتريته أونلاين.", createdAt: "2026-09-10", verified: true },
+  { id: "r4", featured: true, productId: "p-charcoal-wool", author: "ماجد الشهري", city: "أبها", rating: 4, body: "الصوف الفحمي دافئ وثقيل بالشكل الصحيح. سأعود للموسم القادم.", createdAt: "2026-09-21", verified: true },
 ];
 
 export const homepage: HomepageContent = {

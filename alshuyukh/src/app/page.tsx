@@ -21,7 +21,7 @@ export default async function HomePage() {
     catalog.listCollections(),
     catalog.listProducts({ bestSeller: true, limit: 4 }),
     catalog.listOffers(),
-    catalog.listReviews({ limit: 4 }),
+    catalog.listReviews({ featured: true, limit: 4 }),
   ]);
   const fabricCategories = categories.filter((c) => c.parentId === "c-fabrics");
 
