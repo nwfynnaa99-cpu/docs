@@ -33,5 +33,8 @@
     "edge 111",
     "firefox 111",
     "safari 16.4"
-  ]
+  ],
+  "engines": {
+    "node": "22.x"
+  }
 }
