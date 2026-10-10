@@ -26,7 +26,7 @@ function IconButton({ icon, label, onClick, href, badge, className }: { icon: Ic
  * Desktop: logo left · nav centre · actions right (as specified, physical sides).
  * Mobile:  menu · logo · search · cart.
  */
-export function Header() {
+export function Header({ announcement }: { announcement?: { text: string; href?: string } }) {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const count = cartStore.useStore((s) => cartTotals(s.lines).count);
@@ -40,6 +40,21 @@ export function Header() {
 
   const overHero = pathname === "/" && !scrolled;
 
+  // Checkout: distraction-free header (no nav, no cart) to protect conversion.
+  if (pathname.startsWith("/checkout")) {
+    return (
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-ink-line/80 bg-ink/90 backdrop-blur-xl">
+        <div className="container-site grid h-16 grid-cols-[1fr_auto_1fr] items-center md:h-20">
+          <Link href="/" className="inline-flex h-11 items-center gap-2 justify-self-start text-sm text-ivory/70 hover:text-ivory">
+            <Icon name="arrow" size={16} className="rotate-180" /> متابعة التسوق
+          </Link>
+          <Logo compact />
+          <p className="flex items-center gap-2 justify-self-end text-xs text-ivory/70"><Icon name="lock" size={16} className="text-gold" /> دفع آمن</p>
+        </div>
+      </header>
+    );
+  }
+
   return (
     <header
       className={cn(
@@ -47,6 +62,15 @@ export function Header() {
         overHero ? "border-b border-transparent bg-gradient-to-b from-ink-deep/60 to-transparent" : "border-b border-ink-line/80 bg-ink/85 backdrop-blur-xl",
       )}
     >
+      {announcement && (
+        <div className={cn("overflow-hidden bg-gold text-ink transition-[height] duration-500 ease-[var(--ease-silk)]", scrolled ? "h-0" : "h-8")}>
+          {announcement.href ? (
+            <Link href={announcement.href} className="flex h-8 items-center justify-center px-4 text-center text-xs font-medium hover:underline">{announcement.text}</Link>
+          ) : (
+            <p className="flex h-8 items-center justify-center px-4 text-center text-xs font-medium">{announcement.text}</p>
+          )}
+        </div>
+      )}
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:start-4 focus:top-4 focus:z-50 focus:bg-gold focus:px-4 focus:py-2 focus:text-ink">
         انتقل إلى المحتوى
       </a>

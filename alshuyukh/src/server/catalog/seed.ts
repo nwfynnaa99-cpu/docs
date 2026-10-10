@@ -1,4 +1,4 @@
-import type { Category, Collection, HomepageContent, Media, Offer, Product, Review } from "./types";
+import type { Category, Collection, Coupon, HomepageContent, Media, Offer, Product, Review } from "./types";
 
 /*
  * Development seed. Images are procedurally generated placeholders
@@ -342,12 +342,18 @@ export const reviews: Review[] = [
   { id: "r4", featured: true, productId: "p-charcoal-wool", author: "ماجد الشهري", city: "أبها", rating: 4, body: "الصوف الفحمي دافئ وثقيل بالشكل الصحيح. سأعود للموسم القادم.", createdAt: "2026-09-21", verified: true },
 ];
 
+export const coupons: Coupon[] = [
+  { id: "WELCOME10", code: "WELCOME10", percent: 10, label: "خصم 10% على أول طلب", active: true },
+  { id: "SHUYUKH50", code: "SHUYUKH50", amount: 5000, minSubtotal: 40000, label: "خصم 50 ر.س على الطلبات من 400 ر.س", active: true },
+];
+
 export const homepage: HomepageContent = {
+  announcement: { enabled: true, text: "شحن مجاني للطلبات من 500 ر.س إلى كل مدن المملكة", href: "/policies/shipping" },
   hero: {
     eyebrow: "دار أقمشة رجالية سعودية",
     title: "الشيوخ",
     tagline: "فخامة تلبسها.",
-    body: "أقمشة رجالية مختارة بعناية، لتصنع إطلالة تليق بك.",
+    body: "أقمشة رجالية مختارة بعناية،\nلتصنع إطلالة تليق بك.",
     primaryCta: { label: "اكتشف الأقمشة", href: "/categories/fabrics" },
     secondaryCta: { label: "تسوق الآن", href: "/categories/summer-fabrics" },
     image: { src: "/media/hero-drape.webp", alt: "قماش رجالي أسود فاخر منسدل", width: 2400, height: 1500 },

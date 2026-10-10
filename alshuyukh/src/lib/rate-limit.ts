@@ -19,5 +19,13 @@ export function rateLimit(key: string, { limit = 60, windowMs = 60_000 } = {}) {
   return { ok: b.count <= limit, remaining: Math.max(0, limit - b.count), reset: b.reset };
 }
 
+/**
+ * Client IP for rate limiting. Prefers headers that the edge sets and
+ * overwrites (Cloudflare cf-connecting-ip, Vercel/nginx x-real-ip), then the
+ * LAST x-forwarded-for hop, which our own proxy appends (the first entry is
+ * whatever the client chose to send). Deploy behind a CDN or proxy that sets
+ * one of these; without one, every IP header is client-controlled.
+ */
 export const clientIp = (headers: Headers) =>
-  headers.get("x-forwarded-for")?.split(",")[0]?.trim() || headers.get("x-real-ip") || "anonymous";
+  headers.get("cf-connecting-ip")?.trim() ||
+  headers.get("x-real-ip")?.trim() || headers.get("x-forwarded-for")?.split(",").at(-1)?.trim() || "anonymous";

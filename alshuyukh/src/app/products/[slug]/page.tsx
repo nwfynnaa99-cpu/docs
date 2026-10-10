@@ -77,7 +77,7 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <>
-      <div className="container-site pb-16 pt-24 md:pt-32">
+      <div className="container-site pb-16 pt-28 md:pt-36">
         <Breadcrumbs items={crumbs} className="mb-6 md:mb-10" />
 
         <div className="grid gap-10 md:grid-cols-12 lg:gap-16">

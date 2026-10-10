@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { site } from "@/config/site";
-import { track } from "@/lib/analytics/track";
 import { formatAmount } from "@/lib/format";
 import { cart, cartStore, cartTotals, closeOverlays, ui } from "@/lib/store/cart";
 import { buttonClass } from "@/components/ui/button";
@@ -36,10 +35,8 @@ export function CartDrawer() {
   const lines = cartStore.useStore((s) => s.lines);
   const { count, subtotal } = cartTotals(lines);
 
-  const beginCheckout = () => {
-    track("begin_checkout", { currency: "SAR", value: subtotal / 100, items: lines.map((l) => ({ item_id: l.productId, item_name: l.name, price: l.unitPrice / 100, quantity: l.quantity })) });
-    closeOverlays();
-  };
+  // begin_checkout fires on the checkout page itself, so direct visits count too.
+  const beginCheckout = closeOverlays;
 
   return (
     <Drawer
