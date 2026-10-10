@@ -6,15 +6,26 @@
 # and starts it over HTTPS. Without a DOMAIN it uses <server-ip>.sslip.io, a
 # free name that points to this server, so no DNS setup is needed.
 # Run it again to update to the latest version; secrets are kept.
+#
+# It also works as a cloud provider's "user data" script, so the server sets
+# itself up on first boot with nobody logged in. Progress is logged to
+# /var/log/alshuyukh-install.log.
 set -eu
+export HOME="${HOME:-/root}"
 
 REPO=${REPO:-https://github.com/nwfynnaa99-cpu/docs.git}
 BRANCH=${BRANCH:-claude/alshuyukh-accounting-saas-uf09e2}
 DIR=/opt/alshuyukh
 
+main() {
 say() { printf '\n\033[1;32m== %s\033[0m\n' "$1"; }
 
 [ "$(id -u)" = 0 ] || { echo "Run this as root (or with sudo)."; exit 1; }
+
+# On first boot the system updater may hold the package lock for a while.
+if command -v fuser >/dev/null 2>&1; then
+  while fuser /var/lib/dpkg/lock-frontend /var/lib/apt/lists/lock >/dev/null 2>&1; do sleep 5; done
+fi
 
 say "Installing Docker and git"
 if ! command -v docker >/dev/null 2>&1; then
@@ -43,7 +54,7 @@ cd "$DIR/alshuyukh-accounting"
 if [ ! -f deploy/.env ]; then
   say "Generating settings and secrets"
   if [ -z "${DOMAIN:-}" ]; then
-    IP=$(curl -fsS4 https://api.ipify.org)
+    IP=$(curl -fsS4 https://api.ipify.org || curl -fsS http://169.254.169.254/metadata/v1/interfaces/public/0/ipv4/address)
     DOMAIN="$(echo "$IP" | tr . -).sslip.io"
   fi
   umask 077
@@ -83,3 +94,6 @@ say "Done"
 echo "Open:  https://$DOMAIN"
 echo "Create your organization from \"أنشئ منشأة جديدة\". To get the platform admin panel (/admin) afterwards:"
 echo "  cd $DIR/alshuyukh-accounting && $COMPOSE run --rm migrate node dist/admin-cli.js grant your@email"
+}
+
+main 2>&1 | tee -a /var/log/alshuyukh-install.log
