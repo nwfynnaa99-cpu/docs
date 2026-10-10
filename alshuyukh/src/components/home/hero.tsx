@@ -37,10 +37,8 @@ export function Hero({ hero }: { hero: HomepageContent["hero"] }) {
           <span><span style={{ "--line": 1 } as React.CSSProperties}>{hero.tagline}</span></span>
         </p>
 
-        <p className="fade-up mt-6 max-w-md text-base leading-8 text-ivory/70 md:mt-8 md:text-lg" style={{ "--line": 2 } as React.CSSProperties}>
-          أقمشة رجالية مختارة بعناية،
-          <br />
-          لتصنع إطلالة تليق بك.
+        <p className="fade-up mt-6 max-w-md whitespace-pre-line text-base leading-8 text-ivory/70 md:mt-8 md:text-lg" style={{ "--line": 2 } as React.CSSProperties}>
+          {hero.body}
         </p>
 
         <div className="fade-up mt-10 flex flex-col gap-3 xs:flex-row xs:items-center md:mt-12" style={{ "--line": 3 } as React.CSSProperties}>

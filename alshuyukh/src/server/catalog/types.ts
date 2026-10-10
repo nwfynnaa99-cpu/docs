@@ -77,10 +77,26 @@ export type Review = {
   verified: boolean;
   /** Shown in the homepage testimonials. */
   featured?: boolean;
+  /** Hidden from the storefront until approved in the admin. Missing = approved (seed data). */
+  approved?: boolean;
 };
+
+export type Coupon = {
+  id: string; // the code, uppercase
+  code: string;
+  label: string;
+  percent?: number;
+  amount?: number; // halalas
+  minSubtotal?: number; // halalas
+  active: boolean;
+  expiresAt?: string;
+};
+
+export type Announcement = { enabled: boolean; text: string; href?: string };
 
 export type HomepageContent = {
   hero: { eyebrow: string; title: string; tagline: string; body: string; primaryCta: { label: string; href: string }; secondaryCta: { label: string; href: string }; image: Media };
   fabricDetail: { title: string; body: string; image: Media; points: { label: string; text: string }[] };
   boxes: { title: string; subtitle: string; body: string; href: string; priceFrom: number };
+  announcement?: Announcement;
 };

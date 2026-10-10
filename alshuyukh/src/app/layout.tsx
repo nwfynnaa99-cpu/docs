@@ -1,11 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, IBM_Plex_Sans_Arabic, Inter } from "next/font/google";
 import { site } from "@/config/site";
+import { catalog } from "@/server/catalog";
 import { buildMetadata, organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 import { AnalyticsProviders } from "@/lib/analytics/providers";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { Overlays } from "@/components/layout/overlays";
+import { StoreOnly } from "@/components/layout/store-only";
 import { MotionRuntime } from "@/components/motion/runtime";
 import { JsonLd } from "@/components/seo/json-ld";
 import "./globals.css";
@@ -30,17 +32,22 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const announcement = (await catalog.getHomepage()).announcement;
   // The self-hosted heading font (public/fonts/README.md) is deliberately not
   // preloaded: Chrome treats font preloads as render-blocking, which delayed
   // first paint by ~1s in Lighthouse. font-display: swap paints immediately.
   return (
     <html lang="ar" dir="rtl" className={`no-js ${plex.variable} ${cormorant.variable} ${inter.variable}`}>
       <body>
-        <Header />
+        <StoreOnly>
+          <Header announcement={announcement?.enabled && announcement.text ? announcement : undefined} />
+        </StoreOnly>
         <main id="main">{children}</main>
-        <Footer />
-        <Overlays />
+        <StoreOnly>
+          <Footer />
+          <Overlays />
+        </StoreOnly>
         <MotionRuntime />
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
         <AnalyticsProviders />
