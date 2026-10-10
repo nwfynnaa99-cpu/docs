@@ -2,11 +2,8 @@
 // Open: https://codespaces.new/nwfynnaa99-cpu/docs/tree/claude/alshuyukh-accounting-saas-uf09e2?devcontainer_path=.devcontainer/alshuyukh/devcontainer.json
 {
   "name": "ALSHUYUKH ACCOUNTING",
-  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-  "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
-    "ghcr.io/devcontainers/features/github-cli:1": {}
-  },
+  // GitHub's default Codespaces image: Docker, the GitHub CLI and openssl are built in.
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
   "hostRequirements": { "cpus": 2, "memory": "8gb" },
   "forwardPorts": [8080],
   "portsAttributes": {

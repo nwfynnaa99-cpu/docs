@@ -29,6 +29,12 @@ ZATCA_WORKER=on
 ENV
 fi
 
+if ! command -v docker >/dev/null 2>&1; then
+  echo "Docker is not available in this codespace. Delete it and create a new one from:"
+  echo "https://codespaces.new/nwfynnaa99-cpu/docs/tree/claude/alshuyukh-accounting-saas-uf09e2?devcontainer_path=.devcontainer/alshuyukh/devcontainer.json"
+  exit 1
+fi
+
 echo "Waiting for Docker…"
 for _ in $(seq 1 60); do docker info >/dev/null 2>&1 && break; sleep 2; done
 
