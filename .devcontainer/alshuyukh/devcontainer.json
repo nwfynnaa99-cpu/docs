@@ -1,0 +1,16 @@
+// Runs ALSHUYUKH ACCOUNTING in GitHub Codespaces for testing.
+// Open: https://codespaces.new/nwfynnaa99-cpu/docs/tree/claude/alshuyukh-accounting-saas-uf09e2?devcontainer_path=.devcontainer/alshuyukh/devcontainer.json
+{
+  "name": "ALSHUYUKH ACCOUNTING",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "hostRequirements": { "cpus": 2, "memory": "8gb" },
+  "forwardPorts": [8080],
+  "portsAttributes": {
+    "8080": { "label": "الشيوخ للمحاسبة", "onAutoForward": "openBrowser" }
+  },
+  "postStartCommand": "bash alshuyukh-accounting/deploy/codespace-start.sh"
+}

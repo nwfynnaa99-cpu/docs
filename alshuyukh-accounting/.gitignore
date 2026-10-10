@@ -4,3 +4,5 @@ dist/
 *.log
 coverage/
 e2e-failure-*.png
+deploy/.env
+deploy/.env.codespace
