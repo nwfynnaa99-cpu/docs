@@ -74,10 +74,16 @@ const MIGRATIONS: string[] = [
 ];
 
 function open() {
-  const file = process.env.DATABASE_PATH ?? path.join(process.cwd(), "data", "alshuyukh.db");
+  // Vercel's filesystem is read-only except /tmp, which is per-instance and
+  // not persistent: good enough for previews, not for production data.
+  const file = process.env.DATABASE_PATH ?? (process.env.VERCEL ? "/tmp/alshuyukh.db" : path.join(process.cwd(), "data", "alshuyukh.db"));
   if (file !== ":memory:") mkdirSync(path.dirname(file), { recursive: true });
   const db = new DatabaseSync(file);
-  db.exec("PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON; PRAGMA busy_timeout = 5000; PRAGMA synchronous = NORMAL;");
+  // busy_timeout must be set before anything else: parallel build workers
+  // open a fresh database at the same time, and even switching to WAL
+  // needs a lock.
+  db.exec("PRAGMA busy_timeout = 10000");
+  db.exec("PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON; PRAGMA synchronous = NORMAL;");
 
   const version = (db.prepare("PRAGMA user_version").get() as { user_version: number }).user_version;
   for (let v = version; v < MIGRATIONS.length; v++) {

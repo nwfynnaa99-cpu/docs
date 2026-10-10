@@ -4,7 +4,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 
-export const UPLOAD_DIR = process.env.UPLOAD_DIR ?? path.join(process.cwd(), "data", "uploads");
+export const UPLOAD_DIR = process.env.UPLOAD_DIR ?? (process.env.VERCEL ? "/tmp/uploads" : path.join(process.cwd(), "data", "uploads"));
 export const UPLOAD_NAME = /^[a-z0-9]{24}(-macro)?\.webp$/;
 const MAX_BYTES = 8 * 1024 * 1024;
 
