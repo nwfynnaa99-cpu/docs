@@ -1,0 +1,27 @@
+# Adds automatic HTTPS (Caddy + Let's Encrypt) in front of docker-compose.prod.yml:
+#   docker compose -f docker-compose.prod.yml -f docker-compose.https.yml --env-file deploy/.env up -d
+# DOMAIN in deploy/.env must point to this server (deploy/install.sh uses <ip>.sslip.io).
+
+services:
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN:?}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      web: { condition: service_started }
+
+  web:
+    # Reachable only through Caddy.
+    ports: !reset []
+
+volumes:
+  caddy_data:
+  caddy_config:

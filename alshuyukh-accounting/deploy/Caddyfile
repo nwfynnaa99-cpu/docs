@@ -1,0 +1,7 @@
+# HTTPS in front of nginx. Caddy obtains and renews the Let's Encrypt
+# certificate for $DOMAIN automatically.
+{$DOMAIN} {
+	encode gzip
+	header Strict-Transport-Security "max-age=31536000"
+	reverse_proxy web:8080
+}
